@@ -1,16 +1,21 @@
 import itertools
 import os
 
-SIZE = 3
+MAX_GRID = 1000000
+SIZE = 5
 
 def generate_all_possible_boards():
     all_boards = []
     # Générer toutes les combinaisons possibles de la grille
     empty_cells = " " * SIZE * SIZE
+    cnt = 0
     for combination in itertools.product("XO ", repeat=SIZE * SIZE):
+        cnt += 1
         board = "".join(combination)
         if board.count("X") == board.count("O") or board.count("X") == board.count("O") + 1:
             all_boards.append(board)
+            if (cnt > MAX_GRID):
+                return all_boards
     return all_boards
 
 if __name__ == "__main__":
