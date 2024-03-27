@@ -19,7 +19,7 @@ public:
     
 private:
     char plateau[SIZE][SIZE];
-    int minimax(char joueur, int alpha, int beta);
+    int minimax(char joueur);
     bool estPlein();
     bool estGagnant(char joueur);
     void afficherPlateau();
@@ -62,7 +62,7 @@ void Morpion::jouer(const char* nomFichier) {
 
     cout<<"Start solving..."<<endl;
 
-    int score = minimax(COMPUTER, INT_MIN, INT_MAX);
+    int score = minimax(COMPUTER);
 
     afficherPlateau();
 
@@ -83,7 +83,7 @@ void Morpion::jouer(const char* nomFichier) {
     }
 }
 
-int Morpion::minimax(char joueur, int alpha, int beta) {
+int Morpion::minimax(char joueur) {
     if (estGagnant(COMPUTER)) return 1;
     if (estGagnant(HUMAN)) return -1;
     if (estPlein()) return 0;
@@ -94,11 +94,9 @@ int Morpion::minimax(char joueur, int alpha, int beta) {
             for (int j = 0; j < SIZE; ++j) {
                 if (plateau[i][j] == EMPTY) {
                     plateau[i][j] = COMPUTER;
-                    int score = minimax(HUMAN, alpha, beta);
+                    int score = minimax(HUMAN);
                     plateau[i][j] = EMPTY;
                     meilleurScore = min(meilleurScore, score);
-                    alpha = min(alpha, meilleurScore);
-                    if (beta <= alpha) break; // Coupure beta
                 }
             }
         }
@@ -109,11 +107,9 @@ int Morpion::minimax(char joueur, int alpha, int beta) {
             for (int j = 0; j < SIZE; ++j) {
                 if (plateau[i][j] == EMPTY) {
                     plateau[i][j] = HUMAN;
-                    int score = minimax(COMPUTER, alpha, beta);
+                    int score = minimax(COMPUTER);
                     plateau[i][j] = EMPTY;
                     pireScore = max(pireScore, score);
-                    beta = max(beta, pireScore);
-                    if (beta <= alpha) break; // Coupure alpha
                 }
             }
         }

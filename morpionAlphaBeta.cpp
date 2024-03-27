@@ -37,40 +37,49 @@ void Morpion::jouer(const char* nomFichier) {
     while (getline(fichier, ligne)) {
         vector<char> grille;
         for (char c : ligne) {
-            if (c != ' ')
+            if (c != ' '){
                 grille.push_back(c);
+            }else{
+                grille.push_back(EMPTY);
+            }
         }
         if (grille.size() == SIZE * SIZE)
             grilles.push_back(grille);
+        else{
+            cout<<grille.size()<<", "<<SIZE*SIZE<<endl;
+        }
     }
 
     fichier.close();
 
-    for (auto& grille : grilles) {
+    cout<<"Start parsing..."<<endl;
+    for (int k = 0; k < grilles.size(); k++){
         for (int i = 0; i < SIZE; ++i) {
             for (int j = 0; j < SIZE; ++j) {
-                plateau[i][j] = grille[i * SIZE + j];
+                plateau[i][j] = grilles[k][i * SIZE + j];
             }
         }
 
-        afficherPlateau();
+    cout<<"Start solving..."<<endl;
 
-        int score = minimax(COMPUTER, INT_MIN, INT_MAX);
+    int score = minimax(COMPUTER, INT_MIN, INT_MAX);
 
-        if (score > 0){
-            cout << "L'ordinateur a gagné !" << endl;
-            nbDefaite +=1;
-        }
-        else if (score < 0){
-            cout << "Le joueur humain a gagné !" << endl;
-            nbVictoire ++;
-        }
-        else{
-            cout << "Match nul !" << endl;
-            nbNul++;
-        }
+    afficherPlateau();
 
-        cout << endl;
+    if (score > 0){
+        cout << "L'ordinateur a gagné !" << endl;
+        nbVictoire++;
+    }
+    else if (score < 0){
+        cout << "Le joueur humain a gagné !" << endl;
+        nbDefaite++;
+    }
+    else{
+        cout << "Match nul !" << endl;
+        nbNul++;
+    }
+
+    cout << endl;
     }
 }
 
@@ -112,7 +121,6 @@ int Morpion::minimax(char joueur, int alpha, int beta) {
     }
 }
 
-
 bool Morpion::estPlein() {
     for (int i = 0; i < SIZE; ++i) {
         for (int j = 0; j < SIZE; ++j) {
@@ -125,14 +133,33 @@ bool Morpion::estPlein() {
 
 bool Morpion::estGagnant(char joueur) {
     for (int i = 0; i < SIZE; ++i) {
-        if (plateau[i][0] == joueur && plateau[i][1] == joueur && plateau[i][2] == joueur)
+        bool ligne = true;
+        for (int j = 0; j < SIZE; j++){
+            ligne = ligne && plateau[i][j] == joueur;
+        }
+        if (ligne)
             return true;
-        if (plateau[0][i] == joueur && plateau[1][i] == joueur && plateau[2][i] == joueur)
+
+        bool colonne = true;
+        for (int j = 0; j < SIZE; j++){
+            colonne = colonne && plateau[j][i] == joueur;
+        }
+        if (colonne)
             return true;
     }
-    if (plateau[0][0] == joueur && plateau[1][1] == joueur && plateau[2][2] == joueur)
+
+    bool diagonal = true;
+    for (int j = 0; j < SIZE; j++){
+        diagonal = diagonal && plateau[j][j] == joueur;
+    }
+    if (diagonal)
         return true;
-    if (plateau[0][2] == joueur && plateau[1][1] == joueur && plateau[2][0] == joueur)
+
+    diagonal = true;
+    for (int j = 0; j < SIZE; j++){
+        diagonal = diagonal && plateau[j][SIZE-1-j] == joueur;
+    }
+    if (diagonal)
         return true;
     return false;
 }
