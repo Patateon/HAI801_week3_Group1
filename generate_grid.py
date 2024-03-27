@@ -1,8 +1,8 @@
 import itertools
 import os
 
-MAX_GRID = 10
-SIZE = 6
+MAX_GRID = 150000
+SIZE = 4
 
 def generate_all_possible_boards():
     all_boards = []

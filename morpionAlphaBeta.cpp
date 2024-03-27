@@ -5,7 +5,7 @@
 
 using namespace std;
 
-const int SIZE = 5;
+const int SIZE = 4;
 const char EMPTY = '-';
 const char COMPUTER = 'X';
 const char HUMAN = 'O';
@@ -60,26 +60,26 @@ void Morpion::jouer(const char* nomFichier) {
             }
         }
 
-    cout<<"Start solving..."<<endl;
+    // cout<<"Start solving..."<<endl;
 
     int score = minimax(COMPUTER, INT_MIN, INT_MAX);
 
-    afficherPlateau();
+    // afficherPlateau();
 
     if (score > 0){
-        cout << "L'ordinateur a gagné !" << endl;
+        // cout << "L'ordinateur a gagné !" << endl;
         nbVictoire++;
     }
     else if (score < 0){
-        cout << "Le joueur humain a gagné !" << endl;
+        // cout << "Le joueur humain a gagné !" << endl;
         nbDefaite++;
     }
     else{
-        cout << "Match nul !" << endl;
+        // cout << "Match nul !" << endl;
         nbNul++;
     }
 
-    cout << endl;
+    // cout << endl;
     }
 }
 
