@@ -5,7 +5,7 @@
 
 using namespace std;
 
-const int SIZE = 3;
+const int SIZE = 5;
 const char EMPTY = '-';
 const char COMPUTER = 'X';
 const char HUMAN = 'O';

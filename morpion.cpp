@@ -19,7 +19,7 @@ public:
     
 private:
     char plateau[SIZE][SIZE];
-    int minimax(char joueur);
+    int minimax(char joueur, int alpha, int beta);
     bool estPlein();
     bool estGagnant(char joueur);
     void afficherPlateau();
@@ -62,7 +62,7 @@ void Morpion::jouer(const char* nomFichier) {
 
     cout<<"Start solving..."<<endl;
 
-    int score = minimax(COMPUTER);
+    int score = minimax(COMPUTER, INT_MIN, INT_MAX);
 
     afficherPlateau();
 
@@ -83,33 +83,37 @@ void Morpion::jouer(const char* nomFichier) {
     }
 }
 
-int Morpion::minimax(char joueur) {
+int Morpion::minimax(char joueur, int alpha, int beta) {
     if (estGagnant(COMPUTER)) return 1;
     if (estGagnant(HUMAN)) return -1;
     if (estPlein()) return 0;
 
     if (joueur == COMPUTER) {
-        int meilleurScore = INT_MIN;
+        int meilleurScore = INT_MAX;
         for (int i = 0; i < SIZE; ++i) {
             for (int j = 0; j < SIZE; ++j) {
                 if (plateau[i][j] == EMPTY) {
                     plateau[i][j] = COMPUTER;
-                    int score = minimax(HUMAN);
+                    int score = minimax(HUMAN, alpha, beta);
                     plateau[i][j] = EMPTY;
-                    meilleurScore = max(meilleurScore, score);
+                    meilleurScore = min(meilleurScore, score);
+                    alpha = min(alpha, meilleurScore);
+                    if (beta <= alpha) break; // Coupure beta
                 }
             }
         }
         return meilleurScore;
     } else {
-        int pireScore = INT_MAX;
+        int pireScore = INT_MIN;
         for (int i = 0; i < SIZE; ++i) {
             for (int j = 0; j < SIZE; ++j) {
                 if (plateau[i][j] == EMPTY) {
                     plateau[i][j] = HUMAN;
-                    int score = minimax(COMPUTER);
+                    int score = minimax(COMPUTER, alpha, beta);
                     plateau[i][j] = EMPTY;
-                    pireScore = min(pireScore, score);
+                    pireScore = max(pireScore, score);
+                    beta = max(beta, pireScore);
+                    if (beta <= alpha) break; // Coupure alpha
                 }
             }
         }
